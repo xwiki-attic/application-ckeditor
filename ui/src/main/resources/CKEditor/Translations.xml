@@ -58,7 +58,7 @@ ckeditor.admin.reset.confirmation=Are you sure you want to restore the default c
 ckeditor.plugin.link.options=Options
 ckeditor.plugin.link.anchor=Anchor
 ckeditor.plugin.link.queryString=Query String
-ckeditor.plugin.link.defaultLabel=type the link label
+ckeditor.plugin.link.defaultLabel=Type the link label
 ckeditor.plugin.link.openInNewTab=Open Link in New Tab
 
 ckeditor.plugin.macro.placeholder=macro:{0}
