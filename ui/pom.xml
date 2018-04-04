@@ -29,7 +29,7 @@
     <artifactId>application-ckeditor-pom</artifactId>
     <version>1.21-SNAPSHOT</version>
   </parent>
-  <artifactId>application-ckeditor</artifactId>
+  <artifactId>application-ckeditor-ui</artifactId>
   <name>CKEditor Integration</name>
   <packaging>xar</packaging>
   <description>Adds support for editing wiki pages using CKEditor.</description>
