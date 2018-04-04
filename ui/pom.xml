@@ -30,7 +30,7 @@
     <version>1.21-SNAPSHOT</version>
   </parent>
   <artifactId>application-ckeditor-ui</artifactId>
-  <name>CKEditor Integration UI</name>
+  <name>CKEditor Integration</name>
   <packaging>xar</packaging>
   <description>Adds support for editing wiki pages using CKEditor.</description>
   <properties>
