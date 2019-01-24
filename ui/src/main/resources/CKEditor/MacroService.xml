@@ -181,7 +181,7 @@
       'deprecated': $parameterDescriptor.deprecated,
       'advanced': $parameterDescriptor.advanced,
       'defaultValue': $parameterDescriptor.defaultValue,
-      'type': $parameterDescriptor.parameterType,
+      'type': $parameterDescriptor.displayType,
       'index': $foreach.index
     })
     #set ($groupDescriptor = $parameterDescriptor.groupDescriptor)
