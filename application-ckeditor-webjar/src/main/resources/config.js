@@ -117,7 +117,7 @@ CKEDITOR.editorConfig = function(config) {
       + 'officeImporter,xwiki-macro',
     // We remove the default sourcearea plugin because we use our own xwiki-sourcearea plugin which supports switching to
     // Source while editing in-place. We still bundle the sourcearea plugin because we reuse its icons and translations.
-    removePlugins: 'bidi,colorbutton,font,justify,save,sourcearea',
+    removePlugins: 'bidi,colorbutton,font,justify,save,sourcearea,xwiki-image',
     toolbarGroups: [
       {name: 'format'},
       {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
