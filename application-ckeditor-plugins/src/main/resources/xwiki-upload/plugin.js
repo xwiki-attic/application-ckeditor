@@ -26,6 +26,9 @@
 
     init: function(editor) {
       preventParallelUploads(editor);
+      if ((editor.config['xwiki-upload'] || {}).isTemporaryAttachmentSupported) {
+        listenUploadedAttachments(editor);
+      }
     },
 
     afterInit: function(editor) {
@@ -138,5 +141,17 @@
     // * another event listener might send the upload request before we overwrite the send function;
     //   see https://ckeditor.com/docs/ckeditor4/latest/guide/dev_file_upload.html#request-2
     }, null, null, 1);
+  };
+
+  // Inject a new input field when an attachment is added so that the save request knows which are the new attachments
+  var listenUploadedAttachments = function(editor) {
+    editor.on('fileUploadResponse', function (event) {
+      var input = $('<input>').attr({
+        'type': 'hidden',
+        'name': 'uploadedFiles',
+        'value': event.data.fileLoader.fileName
+      });
+      input.insertAfter($(editor.element.$));
+    });
   };
 })();

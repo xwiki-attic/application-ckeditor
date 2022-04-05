@@ -375,6 +375,12 @@ define('xwiki-ckeditor', [
         }))
       };
     }
+    // Define if the temporary attachment feature can be used.
+    if ($(element).attr('data-isTemporaryAttachmentSupported') === 'true') {
+      config['xwiki-upload'] = {
+        isTemporaryAttachmentSupported: true
+      };
+    }
     return config;
   };
 
