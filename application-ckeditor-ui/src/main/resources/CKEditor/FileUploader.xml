@@ -163,7 +163,7 @@
 
 {{velocity wiki="false"}}
 #if ($xcontext.action == 'get')
-  #if ($services.wysiwyg.isTemporaryAttachmentSupported())
+  #if ($request.get('allowTemporaryAttachments') == 'true')
     #handleTemporaryUploadRequest
   #else
     #handleUploadRequest

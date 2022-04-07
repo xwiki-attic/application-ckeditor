@@ -268,24 +268,30 @@ define('xwiki-ckeditor', [
 
   // We have to pass the plugin that makes the request (the initiator) because the expected response can be different
   // (e.g. between the filebrowser and filetools plugins).
-  var getUploadURL = function(document, initiator) {
+  var getUploadURL = function(document, initiator, allowTemporaryAttachments) {
     return document.getURL('get', $.param({
       sheet: 'CKEditor.FileUploader',
       outputSyntax: 'plain',
       syntax: document.syntax,
       language: currentLocale,
       form_token: xwikiMeta.form_token,
-      initiator: initiator
+      initiator: initiator,
+      allowTemporaryAttachments: allowTemporaryAttachments
     }));
   };
 
-  // Extend the default CKEditor configuration with settings that depend on the source document.
-  var getConfig = function(element) {
+  var getDocument = function(element) {
     var sourceDocument = XWiki.currentDocument;
     var sourceDocumentReference = $(element).attr('data-sourceDocumentReference');
     if (sourceDocumentReference) {
       sourceDocument = new XWiki.Document(XWiki.Model.resolve(sourceDocumentReference, XWiki.EntityType.DOCUMENT));
     }
+    return sourceDocument;
+  };
+
+  // Extend the default CKEditor configuration with settings that depend on the source document.
+  var getConfig = function(element) {
+    var sourceDocument = getDocument(element);
     sourceDocument.syntax = $(element).attr('data-sourceDocumentSyntax');
     var isHTML5 = $(element).data('syntax') !== 'annotatedxhtml/1.0';
 
@@ -304,16 +310,17 @@ define('xwiki-ckeditor', [
       }
     }
 
+    var isTemporaryAttachmentSupported = $(element).attr('data-isTemporaryAttachmentSupported') || false;
     var config = {
       allowedContent: allowedContent,
       editorplaceholder: $jsontool.serialize($services.localization.render('ckeditor.content.placeholder')),
-      filebrowserUploadUrl: getUploadURL(sourceDocument, 'filebrowser'),
+      filebrowserUploadUrl: getUploadURL(sourceDocument, 'filebrowser', isTemporaryAttachmentSupported),
       // This is used in CKEditor.FileUploader so we must keep them in sync.
       fileTools_defaultFileName: '__fileCreatedFromDataURI__',
       height: $(element).height(),
       // CKEditor uses '-' (dash) as locale separator (between the language code and the country code).
       language: currentLocale.toLowerCase().replace('_', '-'),
-      uploadUrl: getUploadURL(sourceDocument, 'filetools'),
+      uploadUrl: getUploadURL(sourceDocument, 'filetools', isTemporaryAttachmentSupported),
       stylesSet: isHTML5 ? 'html5' : 'html4',
       'xwiki-image' : {
         captionAllowedContent: allowedContentWithoutFigure
@@ -338,6 +345,9 @@ define('xwiki-ckeditor', [
           outputSyntax: 'plain',
           language: currentLocale
         }))
+      },
+      'xwiki-upload': {
+        'isTemporaryAttachmentSupported': isTemporaryAttachmentSupported
       },
       mentions: [
         {
@@ -375,12 +385,6 @@ define('xwiki-ckeditor', [
         }))
       };
     }
-    // Define if the temporary attachment feature can be used.
-    if ($(element).attr('data-isTemporaryAttachmentSupported') === 'true') {
-      config['xwiki-upload'] = {
-        isTemporaryAttachmentSupported: true
-      };
-    }
     return config;
   };
 
@@ -394,6 +398,29 @@ define('xwiki-ckeditor', [
   ckeditor.inline = function(element, config) {
     // Take into account the configuration options specified on the target element.
     return oldInline.call(this, element, ckeditor.tools.extend(getConfig(element), config, true));
+  };
+
+  // Define a way to switch on or off the temporary attachment upload mechanism.
+  ckeditor.switchTemporaryAttachmentUpload = function (isEnabled, instance, config) {
+    if (!config) {
+      var config = instance.config;
+    }
+    if (!config['xwiki-upload']) {
+      config['xwiki-upload'] = {
+        'isTemporaryAttachmentSupported': true
+      }
+    }
+
+    if (isEnabled !== config['xwiki-upload'].isTemporaryAttachmentSupported) {
+      var element = instance.element;
+      var sourceDocument = getDocument(element);
+      config.filebrowserUploadUrl = getUploadURL(sourceDocument, 'filebrowser', isEnabled);
+      config.uploadUrl = getUploadURL(sourceDocument, 'filetools', isEnabled);
+      config['xwiki-upload'].isTemporaryAttachmentSupported = isEnabled;
+      $(element).attr('data-isTemporaryAttachmentSupported', isEnabled);
+      // Those properties should never be overridden by the in-page configuration.
+      ckeditor.keepConfigValues = ['xwiki-upload', 'filebrowserUploadUrl', 'uploadUrl'];
+    }
   };
 
   //
@@ -412,8 +439,9 @@ define('xwiki-ckeditor', [
       ckeditor.tools.array.forEach(ckeditor.tools.object.keys(source), function(propertyName) {
         // Only copy existing fields if in overwrite mode.
         if (overwrite === true || target[propertyName] == null) {
-          // Only copy specified fields if list is provided.
-          if (!propertiesList || (propertyName in propertiesList)) {
+          // Only copy specified fields if list is provided and the property should not be ignored.
+          if (!(ckeditor.keepConfigValues &amp;&amp; ckeditor.keepConfigValues.includes(propertyName))
+              &amp;&amp; (!propertiesList || (propertyName in propertiesList))) {
             // NOTE: This is the only part we overwrite.
             setObjectProperty(target, propertyName, source[propertyName]);
           }
