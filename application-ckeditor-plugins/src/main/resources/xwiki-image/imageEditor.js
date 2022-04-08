@@ -93,7 +93,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
                     imageStyles.unshift({label: '---', value: ''});
                     callback(imageStyles);
                     // Sets the default value once the values are loaded.
-                    imageStylesField.data('selectize').addItem(defaultStyle.defaultStyle);
+                    imageStylesField.data('selectize').addItem(defaultStyle.defaultStyle || '');
                     resolve(values.imageStyles);
                   }, function(err) {
                     reject(err);
@@ -247,6 +247,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
         if (config === undefined) {
           config = {};
           noStyle = true;
+          overrideValues = false;
         }
 
         // Image size

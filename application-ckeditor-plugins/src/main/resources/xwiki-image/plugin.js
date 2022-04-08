@@ -38,7 +38,7 @@
           temp.append(wrapper);
 
           var instance = editor.widgets.initOn(element, widget, {});
-          instance.edit();
+          instance.setData(data);
           editor.widgets.initOn(element, widget, data);
           editor.widgets.finalizeCreation(temp);
         }

@@ -25,7 +25,7 @@ define('imageSelectorTranslationKeys', [], [
 
 
 // TODO: xwiki-skinx is a macro selector specific module, it needs to be moved somewhere common.
-define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l10n!imageEditor', 'xwiki-skinx'],
+define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l10n!imageSelector', 'xwiki-skinx'],
   function($, $modal, resource, notification, translations) {
     'use strict';
 
@@ -64,7 +64,6 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
           var entityReference = resource.convertResourceReferenceToEntityReference(resourceReference);
           var serialized = XWiki.Model.serialize(entityReference);
           saveSelectedImageReference(serialized, modal);
-          // TODO: show success and stop spinner and cleanup upload field.
           imageSelector.removeClass('loading');
           notification('File upload succeeded', $("#upload > form > dl > dd"), 'done');
         });
@@ -87,7 +86,15 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
       });
     }
 
-    function getEntityReference(reference) {
+    function getEntityReference(referenceStr) {
+      var reference;
+      if (referenceStr.startsWith("attachment:")) {
+        var separatorIndex = referenceStr.indexOf(':');
+        reference = referenceStr.substr(separatorIndex + 1);
+      } else {
+        reference = referenceStr;
+      }
+
       return XWiki.Model.resolve(reference, XWiki.EntityType.ATTACHMENT);
     }
 
