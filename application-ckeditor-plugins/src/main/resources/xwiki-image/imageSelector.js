@@ -127,12 +127,6 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
     }
 
     // Initialize the modal.
-    /**
-     * TODO:
-     * - Provide an API to pass on the selected image to the next step.
-     */
-
-    // TOOD: Use a data property to know if the content has been loaded, that way the content is only loaded once.
     return $modal.createModalStep({
       'class': 'image-selector-modal',
       title: translations.get('modal.title'),
@@ -143,12 +137,7 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
         var selectButton = modal.find('.modal-footer .btn-primary');
         // Make the modal larger.
         modal.find('.modal-dialog').addClass('modal-lg');
-
-        // TODO: template:
-        // See https://getbootstrap.com/docs/4.2/components/navs/#tabs for the tabs (one per selector)
-        // Then a https://getbootstrap.com/docs/4.2/components/forms/ for each tab
-        // Same for the pane (one default tab + 1 advanced one (or an expandable field as we do for the macros?)
-
+        
         modal.on('shown.bs.modal', function() {
           initialize(modal);
         });
