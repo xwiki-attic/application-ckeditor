@@ -118,7 +118,7 @@
 #end
 
 #macro (sendSuccess $document $fileName)
-  #set ($url = $document.getAttachmentURL($fileName))
+  #set ($url = $document.getAttachmentURL($fileName, 'download', 'tempupload=true'))
   #set ($attachmentReference = $services.model.createAttachmentReference($document.documentReference, $fileName))
   #set ($resourceReference = {
     'type': 'attach',

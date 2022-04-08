@@ -405,14 +405,14 @@ define('xwiki-ckeditor', [
     if (!config) {
       var config = instance.config;
     }
+    var element = instance.element;
     if (!config['xwiki-upload']) {
       config['xwiki-upload'] = {
-        'isTemporaryAttachmentSupported': true
+        'isTemporaryAttachmentSupported': $(element).attr('data-isTemporaryAttachmentSupported')
       }
     }
 
     if (isEnabled !== config['xwiki-upload'].isTemporaryAttachmentSupported) {
-      var element = instance.element;
       var sourceDocument = getDocument(element);
       config.filebrowserUploadUrl = getUploadURL(sourceDocument, 'filebrowser', isEnabled);
       config.uploadUrl = getUploadURL(sourceDocument, 'filetools', isEnabled);

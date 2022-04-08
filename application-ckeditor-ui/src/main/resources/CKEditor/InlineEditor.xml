@@ -161,7 +161,7 @@
       'data-sourceDocumentReference': XWiki.Model.serialize(config.document.documentReference),
       'data-sourceDocumentSyntax': config.document.syntax,
       'data-officeImporterSupported': config.enableOfficeImport,
-      'data-isTemporaryAttachmentSupported': true,
+      'data-isTemporaryAttachmentSupported': (config.enableTemporaryAttachmentUpload === true),
       'data-syntax': 'syntax' in config ? config['syntax'] : 'annotatedxhtml/1.0'
     }).each(function() {
       try {
