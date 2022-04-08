@@ -90,11 +90,11 @@
       #end
       #createAttachment($fileName)
     #else
-      #sendError(403 'The CSRF token is missing.')
+      #sendError(403 "$services.localization.render('ckeditor.upload.error.csrf')")
     #end
   #else
     ## Bad Request
-    #sendError(400 "The 'upload' request parameter is missing. Either you didn't submit any file or the size of the submitted file exceeds the configured maximum upload size.")
+    #sendError(400 "$services.localization.render('ckeditor.upload.error.emptyreturn')")
   #end
 #end
 
@@ -110,10 +110,10 @@
     #if ($attachment)
       #sendSuccess($document, $attachment.filename)
     #else
-      #sendError(400 "The 'upload' request parameter is missing. Either you didn't submit any file or the size of the submitted file exceeds the configured maximum upload size.")
+      #sendError(400 "$services.localization.render('ckeditor.upload.error.emptyreturn')")
     #end
   #else
-    #sendError(403 'The CSRF token is missing.')
+    #sendError(403 "$services.localization.render('ckeditor.upload.error.csrf')")
   #end
 #end
 
