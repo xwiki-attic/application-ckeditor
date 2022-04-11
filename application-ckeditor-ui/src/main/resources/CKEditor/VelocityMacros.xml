@@ -220,8 +220,8 @@
     'spellcheck': false,
     'data-syntax': ${services.wysiwyg.HTMLSyntax.toIdString()|'annotatedxhtml/1.0'},
     'data-sourceDocumentSyntax': $sourceDocument.syntax.toIdString(),
-    'data-officeImporterSupported': $temporaryAttachmentSupported,
-    'data-isTemporaryAttachmentSupported': true
+    'data-officeImporterSupported': $officeImporterSupported,
+    'data-isTemporaryAttachmentSupported': $temporaryAttachmentSupported
   }))
   &lt;textarea
     #foreach ($entry in $parameters.attributes.entrySet())
