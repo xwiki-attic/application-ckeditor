@@ -176,16 +176,16 @@
               $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.none'))
             &lt;/label&gt;
             &lt;label&gt;
-              &lt;input type="radio" name="alignment" value="left"/&gt;
-              $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.left'))
+              &lt;input type="radio" name="alignment" value="start"/&gt;
+              $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.start'))
             &lt;/label&gt;
             &lt;label&gt;
               &lt;input type="radio" name="alignment" value="center"/&gt;
               $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.center'))
             &lt;/label&gt;
             &lt;label&gt;
-              &lt;input type="radio" name="alignment" value="right"/&gt;
-              $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.right'))
+              &lt;input type="radio" name="alignment" value="end"/&gt;
+              $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.end'))
             &lt;/label&gt;
           &lt;/dd&gt;
           &lt;dt&gt;

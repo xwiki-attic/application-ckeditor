@@ -133,11 +133,11 @@ ckeditor.plugin.image.imageEditor.advancedTab.border.hint=When checked, the imag
 ckeditor.plugin.image.imageEditor.advancedTab.alignment.label=Alignment
 ckeditor.plugin.image.imageEditor.advancedTab.alignment.hint=Define the image alignment.
 ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.none=None
-ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.left=Left
+ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.start=Start
 ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.center=Center
-ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.right=Right
+ckeditor.plugin.image.imageEditor.advancedTab.alignment.option.end=End
 ckeditor.plugin.image.imageEditor.advancedTab.textWrap.label=Text Wrap
-ckeditor.plugin.image.imageEditor.advancedTab.textWrap.hint=When checked, the image is wraped around the surounding text.
+ckeditor.plugin.image.imageEditor.advancedTab.textWrap.hint=When checked, the image is wrapped around the surrounding text.
 
 ckeditor.plugin.image.imageSelector.documentTreeTab.title=Document Tree
 ckeditor.plugin.image.imageSelector.uploadTab.title=Upload
