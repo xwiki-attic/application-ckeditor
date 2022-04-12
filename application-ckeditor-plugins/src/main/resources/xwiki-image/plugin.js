@@ -82,11 +82,11 @@
         }
 
         // Style
-        this.setData('imageStyle', this.parts.image.getAttribute('data-ckeditor-image-style'));
+        this.setData('imageStyle', this.parts.image.getAttribute('data-xwiki-image-style'));
 
-        this.setData('border', this.parts.image.getAttribute('data-ckeditor-image-style-border'));
-        this.setData('alignment', this.parts.image.getAttribute('data-ckeditor-image-style-alignment') || 'none');
-        this.setData('textWrap', this.parts.image.getAttribute('data-ckeditor-image-style-text-wrap'));
+        this.setData('border', this.parts.image.getAttribute('data-xwiki-image-style-border'));
+        this.setData('alignment', this.parts.image.getAttribute('data-xwiki-image-style-alignment') || 'none');
+        this.setData('textWrap', this.parts.image.getAttribute('data-xwiki-image-style-text-wrap'));
       };
 
       var originalData = imageWidget.data;
@@ -102,27 +102,27 @@
 
         // Style
         if (this.data.imageStyle) {
-          this.parts.image.setAttribute('data-ckeditor-image-style', this.data.imageStyle);
+          this.parts.image.setAttribute('data-xwiki-image-style', this.data.imageStyle);
         } else {
-          this.parts.image.removeAttribute('data-ckeditor-image-style');
+          this.parts.image.removeAttribute('data-xwiki-image-style');
         }
 
         if (this.data.border) {
-          this.parts.image.setAttribute('data-ckeditor-image-style-border', this.data.border);
+          this.parts.image.setAttribute('data-xwiki-image-style-border', this.data.border);
         } else {
-          this.parts.image.removeAttribute('data-ckeditor-image-style-border');
+          this.parts.image.removeAttribute('data-xwiki-image-style-border');
         }
 
         if (this.data.alignment && this.data.alignment !== 'none') {
-          this.parts.image.setAttribute('data-ckeditor-image-style-alignment', this.data.alignment);
+          this.parts.image.setAttribute('data-xwiki-image-style-alignment', this.data.alignment);
         } else {
-          this.parts.image.removeAttribute('data-ckeditor-image-style-alignment');
+          this.parts.image.removeAttribute('data-xwiki-image-style-alignment');
         }
 
         if (this.data.textWrap) {
-          this.parts.image.setAttribute('data-ckeditor-image-style-text-wrap', this.data.textWrap);
+          this.parts.image.setAttribute('data-xwiki-image-style-text-wrap', this.data.textWrap);
         } else {
-          this.parts.image.removeAttribute('data-ckeditor-image-style-text-wrap');
+          this.parts.image.removeAttribute('data-xwiki-image-style-text-wrap');
         }
 
         originalData.call(this);
