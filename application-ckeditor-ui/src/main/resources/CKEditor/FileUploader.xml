@@ -106,7 +106,7 @@
       #set ($document = $xwiki.getDocument($request.document))
     #end
     #set ($reference = $document.documentReference)
-    #set ($attachment = $services.wysiwyg.temporaryUploadAttachment($reference, 'upload'))
+    #set ($attachment = $services.temporaryattachments.uploadTemporaryAttachment($reference, 'upload'))
     #if ($attachment)
       #sendSuccess($document, $attachment.filename)
     #else

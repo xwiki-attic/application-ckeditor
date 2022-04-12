@@ -214,7 +214,7 @@
   #end
   #set ($officeImporterSupported = $officeServerConnected &amp;&amp;
     "$!services.wysiwyg.importOfficeAttachment($missingAttachmentReference, {'useOfficeViewer': true})" != '')
-  #set ($temporaryAttachmentSupported = $services.wysiwyg.isFeatureSupported('uploadTemporaryAttachments') || false)
+  #set ($temporaryAttachmentSupported = ("$!services.temporaryattachments" != ""))
   #set ($discard = $parameters.attributes.putAll({
     'class': "$!parameters.attributes.get('class') ckeditor-textarea loading",
     'spellcheck': false,
