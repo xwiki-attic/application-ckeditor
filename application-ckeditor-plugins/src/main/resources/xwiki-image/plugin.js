@@ -86,7 +86,7 @@
 
         this.setData('border', this.parts.image.getAttribute('data-ckeditor-image-style-border'));
         this.setData('alignment', this.parts.image.getAttribute('data-ckeditor-image-style-alignment') || 'none');
-        this.setData('textWrap', this.parts.image.getAttribute('data-ckeditor-image-style-textWrap'));
+        this.setData('textWrap', this.parts.image.getAttribute('data-ckeditor-image-style-text-wrap'));
       };
 
       var originalData = imageWidget.data;
@@ -120,9 +120,9 @@
         }
 
         if (this.data.textWrap) {
-          this.parts.image.setAttribute('data-ckeditor-image-style-textWrap', this.data.textWrap);
+          this.parts.image.setAttribute('data-ckeditor-image-style-text-wrap', this.data.textWrap);
         } else {
-          this.parts.image.removeAttribute('data-ckeditor-image-style-textWrap');
+          this.parts.image.removeAttribute('data-ckeditor-image-style-text-wrap');
         }
 
         originalData.call(this);
