@@ -310,7 +310,7 @@ define('xwiki-ckeditor', [
       }
     }
 
-    var isTemporaryAttachmentSupported = $(element).attr('data-isTemporaryAttachmentSupported') || false;
+    var temporaryAttachmentSupported = $(element).attr('data-temporary-attachment-supported') || false;
     var config = {
       allowedContent: allowedContent,
       editorplaceholder: $jsontool.serialize($services.localization.render('ckeditor.content.placeholder')),

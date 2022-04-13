@@ -27,7 +27,7 @@
     init: function(editor) {
       preventParallelUploads(editor);
       if ((editor.config['xwiki-upload'] || {}).isTemporaryAttachmentSupported) {
-        listenUploadedAttachments(editor);
+        listenToUploadedAttachments(editor);
       }
     },
 
@@ -143,7 +143,7 @@
     }, null, null, 1);
   };
 
-  // Inject a new input field when an attachment is added so that the save request knows which are the new attachments
+  // Inject a new input field when an attachment is added so that the save request knows which are the new attachments.
   var listenUploadedAttachments = function(editor) {
     editor.on('fileUploadResponse', function (event) {
       var input = $('<input>').attr({

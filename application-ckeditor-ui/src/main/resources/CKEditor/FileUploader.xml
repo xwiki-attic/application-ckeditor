@@ -94,7 +94,7 @@
     #end
   #else
     ## Bad Request
-    #sendError(400 "$services.localization.render('ckeditor.upload.error.emptyreturn')")
+    #sendError(400 "$services.localization.render('ckeditor.upload.error.emptyReturn')")
   #end
 #end
 
