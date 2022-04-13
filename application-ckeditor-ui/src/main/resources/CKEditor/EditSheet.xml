@@ -279,18 +279,13 @@ define('xwiki-ckeditor', [
     }));
   };
 
-  var getDocument = function(element) {
+  // Extend the default CKEditor configuration with settings that depend on the source document.
+  var getConfig = function(element) {
     var sourceDocument = XWiki.currentDocument;
     var sourceDocumentReference = $(element).attr('data-sourceDocumentReference');
     if (sourceDocumentReference) {
       sourceDocument = new XWiki.Document(XWiki.Model.resolve(sourceDocumentReference, XWiki.EntityType.DOCUMENT));
     }
-    return sourceDocument;
-  };
-
-  // Extend the default CKEditor configuration with settings that depend on the source document.
-  var getConfig = function(element) {
-    var sourceDocument = getDocument(element);
     sourceDocument.syntax = $(element).attr('data-sourceDocumentSyntax');
     var isHTML5 = $(element).data('syntax') !== 'annotatedxhtml/1.0';
 
@@ -309,7 +304,6 @@ define('xwiki-ckeditor', [
       }
     }
 
-    var isTemporaryAttachmentSupported = $(element).attr('data-temporary-attachment-supported') || false;
     var config = {
       allowedContent: allowedContent,
       editorplaceholder: $jsontool.serialize($services.localization.render('ckeditor.content.placeholder')),
@@ -344,9 +338,6 @@ define('xwiki-ckeditor', [
           outputSyntax: 'plain',
           language: currentLocale
         }))
-      },
-      'xwiki-upload': {
-        'isTemporaryAttachmentSupported': isTemporaryAttachmentSupported
       },
       mentions: [
         {
