@@ -26,9 +26,8 @@
 
     init: function(editor) {
       preventParallelUploads(editor);
-      if ((editor.config['xwiki-upload'] || {}).isTemporaryAttachmentSupported) {
-        listenToUploadedAttachments(editor);
-      }
+      listenToUploadedAttachments(editor);
+      listenUploadRequest(editor);
     },
 
     afterInit: function(editor) {
@@ -143,15 +142,27 @@
     }, null, null, 1);
   };
 
+  var listenUploadRequest = function (editor) {
+    editor.on('fileUploadRequest', function (event) {
+      if (editor.config['xwiki-upload']) {
+        var xhr = event.data.fileLoader.xhr;
+        xhr.setRequestHeader( 'X-XWiki-Temporary-Attachment-Support',
+          editor.config['xwiki-upload'].isTemporaryAttachmentSupported);
+      }
+    });
+  };
+
   // Inject a new input field when an attachment is added so that the save request knows which are the new attachments.
-  var listenUploadedAttachments = function(editor) {
+  var listenToUploadedAttachments = function(editor) {
     editor.on('fileUploadResponse', function (event) {
-      var input = $('<input>').attr({
-        'type': 'hidden',
-        'name': 'uploadedFiles',
-        'value': event.data.fileLoader.fileName
-      });
-      input.insertAfter($(editor.element.$));
+      if ((editor.config['xwiki-upload'] || {}).isTemporaryAttachmentSupported) {
+        var input = $('<input>').attr({
+          'type': 'hidden',
+          'name': 'uploadedFiles',
+          'value': event.data.fileLoader.fileName
+        });
+        input.insertAfter($(editor.element.$));
+      }
     });
   };
 })();

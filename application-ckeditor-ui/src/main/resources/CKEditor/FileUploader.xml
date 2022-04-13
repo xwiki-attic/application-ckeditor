@@ -106,7 +106,7 @@
       #set ($document = $xwiki.getDocument($request.document))
     #end
     #set ($reference = $document.documentReference)
-    #set ($attachment = $services.temporaryattachments.uploadTemporaryAttachment($reference, 'upload'))
+    #set ($attachment = $services.temporaryAttachments.uploadTemporaryAttachment($reference, 'upload'))
     #if ($attachment)
       #sendSuccess($document, $attachment.filename)
     #else
@@ -163,7 +163,7 @@
 
 {{velocity wiki="false"}}
 #if ($xcontext.action == 'get')
-  #if ($request.get('allowTemporaryAttachments') == 'true')
+  #if ($request.getHeader('X-XWiki-Temporary-Attachment-Support') == 'true')
     #handleTemporaryUploadRequest
   #else
     #handleUploadRequest
