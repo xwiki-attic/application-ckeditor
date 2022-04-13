@@ -87,7 +87,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
                     var imageStyles = values.imageStyles.map(function(value) {
                       return {
                         label: value.prettyName,
-                        value: value.identifier
+                        value: value.type
                       };
                     });
                     imageStyles.unshift({label: '---', value: ''});
@@ -190,7 +190,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       var i = 0;
       for (i; i < imageStylesConfig.length; i++) {
         var imageStyleConfig = imageStylesConfig[i];
-        if (imageStyleConfig.identifier === imageStyle) {
+        if (imageStyleConfig.type === imageStyle) {
           return imageStyleConfig;
         }
       }
