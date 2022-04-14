@@ -40,8 +40,8 @@
   <hidden>true</hidden>
   <content>{{velocity output="false"}}
 #if ($xcontext.action == 'get')
-#template('display_macros.vm')
-#initRequiredSkinExtensions()
+  #template('display_macros.vm')
+  #initRequiredSkinExtensions()
 #end
 {{/velocity}}
 
@@ -106,8 +106,8 @@
 
 {{velocity output="false"}}
 #if ($xcontext.action == 'get')
-#getRequiredSkinExtensions($requiredSkinExtensions)
-#set ($discard = $response.setHeader('X-XWIKI-HTML-HEAD', $requiredSkinExtensions))
+  #getRequiredSkinExtensions($requiredSkinExtensions)
+  #set ($discard = $response.setHeader('X-XWIKI-HTML-HEAD', $requiredSkinExtensions))
 #end
 {{/velocity}}</content>
 </xwikidoc>

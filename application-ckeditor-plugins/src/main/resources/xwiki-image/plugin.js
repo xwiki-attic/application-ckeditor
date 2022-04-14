@@ -24,7 +24,7 @@
     require(['imageWizard'], function(imageWizard) {
       imageWizard({
         editor: editor,
-        macroData: widget.data
+        imageData: widget.data
       }).done(function(data) {
         if (widget && widget.element) {
           widget.setData(data);
@@ -36,10 +36,10 @@
           // Append wrapper to a temporary document. This will unify the environment in which #data listeners work when
           // creating and editing widget.
           temp.append(wrapper);
-
-          var instance = editor.widgets.initOn(element, widget, {});
-          instance.setData(data);
-          editor.widgets.initOn(element, widget, data);
+          
+          // Initialize an empty image widget, then update it with the data from the image dialog.
+          var widgetInstance = editor.widgets.initOn(element, widget, {});
+          widgetInstance.setData(data);
           editor.widgets.finalizeCreation(temp);
         }
       });
@@ -47,7 +47,7 @@
   }
 
   CKEDITOR.plugins.add('xwiki-image', {
-    requires: 'xwiki-image-old', // TODO: maybe require modal to have skinx?
+    requires: 'xwiki-image-old,xwiki-dialog',
     init: function(editor) {
       this.initImageDialogWidget(editor);
     },
@@ -76,7 +76,6 @@
         if (this.parts.caption) {
           this.setData('hasCaption', true);
           // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-          //this.setData('imageCaption', this.parts.caption.getText())
         } else {
           this.setData('hasCaption', false);
         }
@@ -92,13 +91,8 @@
       var originalData = imageWidget.data;
       imageWidget.data = function() {
 
-
         // Caption
         // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-        /*if(this.data.hasCaption && this.parts.caption) {
-          
-           //this.parts.caption.setHtml('<p>'+this.data.imageCaption+'</p>');
-        }*/
 
         // Style
         if (this.data.imageStyle) {

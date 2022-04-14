@@ -24,7 +24,6 @@ define('imageSelectorTranslationKeys', [], [
 ]);
 
 
-// TODO: xwiki-skinx is a macro selector specific module, it needs to be moved somewhere common.
 define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l10n!imageSelector', 'xwiki-skinx'],
   function($, $modal, resource, notification, translations) {
     'use strict';
@@ -55,7 +54,7 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
     }
 
     function initDocumentUpload(editor, modal) {
-      $("#upload form input.button").click(function(event) {
+      $("#upload form input.button").on('click', function(event) {
         event.preventDefault();
         var loader = editor.uploadRepository.create($("#fileUploadField").prop('files')[0]);
         var imageSelector = $('.image-selector');
@@ -120,7 +119,7 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
           .done(function(html, textState, jqXHR) {
             var imageSelector = $('.image-selector');
             var requiredSkinExtensions = jqXHR.getResponseHeader('X-XWIKI-HTML-HEAD');
-            $(params.editor.document.$).loadRequiredSkinExtensions(requiredSkinExtensions);
+            $(document).loadRequiredSkinExtensions(requiredSkinExtensions);
             imageSelector.html(html);
             imageSelector.removeClass('loading');
             initDocumentTree(modal);
@@ -149,13 +148,13 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
           initialize(modal);
         });
         selectButton.on('click', function() {
-          var macroData = modal.data('input').macroData || {};
-          macroData.resourceReference = modal.data('imageReference').value;
-          if (macroData.resourceReference) {
-            macroData.resourceReference.typed = false;
+          var imageData = modal.data('input').imageData || {};
+          imageData.resourceReference = modal.data('imageReference').value;
+          if (imageData.resourceReference) {
+            imageData.resourceReference.typed = false;
           }
           var output = {
-            macroData: macroData,
+            imageData: imageData,
             editor: modal.data('input').editor,
             newImage: modal.data('input').newImage
           };

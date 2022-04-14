@@ -36,8 +36,8 @@ define('imageStyleClient', ['jquery'], function($) {
   function loadImageStylesDefault() {
     if (cachedResultDefault === undefined) {
 
-      return $.getJSON(restURL + "/default",
-        $.param({'documentReference': XWiki.Model.serialize(XWiki.currentDocument.documentReference)}))
+      return Promise.resolve($.getJSON(restURL + "/default",
+        $.param({'documentReference': XWiki.Model.serialize(XWiki.currentDocument.documentReference)})))
         .then(function(defaultStyle) {
           cachedResultDefault = defaultStyle;
           return defaultStyle;
@@ -49,12 +49,12 @@ define('imageStyleClient', ['jquery'], function($) {
 
   function loadImageStyles() {
     if (cachedResult === undefined) {
-      return $.getJSON(restURL,
+      return Promise.resolve($.getJSON(restURL,
         $.param({'documentReference': XWiki.Model.serialize(XWiki.currentDocument.documentReference)}))
         .then(function(defaultStyles) {
           cachedResult = defaultStyles;
           return defaultStyles;
-        });
+        }));
     } else {
       return Promise.resolve(cachedResult);
     }
@@ -66,7 +66,6 @@ define('imageStyleClient', ['jquery'], function($) {
   };
 });
 
-// TODO: xwiki-skinx is a macro selector specific module, it needs to be moved somewhere common.
 define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor', 'xwiki-skinx'],
   function($, $modal, imageStyleClient, translations) {
     'use strict';
@@ -74,7 +73,9 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
     function initImageStyleField(modal) {
       return new Promise(function(resolve, reject) {
         var imageStylesField = $('#imageStyles');
-        if (imageStylesField) {
+        // Check for the presence of the images styles field. This field is not present when the wiki does not 
+        // support the image styles.
+        if (imageStylesField.length > 0) {
           imageStyleClient.loadImageStylesDefault()
             .then(function(defaultStyle) {
               var settings = {
@@ -111,26 +112,16 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       });
     }
 
-    // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-    function initCaptionField() {
-      var activation = $('#imageCaptionActivation');
-      if (activation) {
-        activation.change(function() {
-          $("#imageCaption").prop('disabled', !this.checked);
-        });
-      }
-    }
-
     function addChangeImageButton(insertButton, modal) {
       var selectImageButton = $('<button type="button" class="btn btn-default pull-left"></button>')
         .text(translations.get('modal.backToEditor.button'))
         .prependTo(insertButton.parent());
       selectImageButton.on('click', function() {
-        var macroData = getFormData(modal);
+        var imageData = getFormData(modal);
         modal.data('output', {
           action: 'selectImage',
           editor: modal.data('input').editor,
-          macroData: macroData
+          imageData: imageData
         }).modal('hide');
       });
     }
@@ -143,15 +134,14 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
           .getURL('get');
         $.get(url, $.param({
           language: $('html').attr('lang'),
-          isHTML5: $(params.editor.document).data('syntax') !== 'annotatedxhtml/1.0'
+          isHTML5: params.editor.config.stylesSet === 'html5'
         }))
           .done(function(html, textState, jqXHR) {
             var imageEditor = $('.image-editor');
             var requiredSkinExtensions = jqXHR.getResponseHeader('X-XWIKI-HTML-HEAD');
-            $(params.editor.document.$).loadRequiredSkinExtensions(requiredSkinExtensions);
+            $(document).loadRequiredSkinExtensions(requiredSkinExtensions);
             imageEditor.html(html);
             // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-            // initCaptionField();
             initImageStyleField(modal).then(function() {
               imageEditor.removeClass('loading');
               $('.image-editor-modal button.btn-primary').prop('disabled', false);
@@ -169,32 +159,20 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
     }
 
     function getFormData(modal) {
-      var resourceReference = modal.data('input').macroData.resourceReference;
+      var resourceReference = modal.data('input').imageData.resourceReference;
       return {
         resourceReference: resourceReference,
         imageStyle: $('#imageStyles').val(),
         alignment: $('#advanced [name="alignment"]:checked').val(),
-        border: $('#advanced [name="imageBorder"]').is(':checked'),
-        textWrap: $('#advanced [name="textWrap"]').is(':checked'),
+        border: $('#advanced [name="imageBorder"]').prop('checked'),
+        textWrap: $('#advanced [name="textWrap"]').prop('checked'),
         alt: $('#altText').val(),
-        hasCaption: $("#imageCaptionActivation").is(':checked'),
+        hasCaption: $("#imageCaptionActivation").prop('checked'),
         // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-        //imageCaption: $("#imageCaption").val(), 
         width: $("#imageWidth").val(),
         height: $("#imageHeight").val(),
         src: CKEDITOR.plugins.xwikiResource.getResourceURL(resourceReference, modal.data('input').editor)
       };
-    }
-
-    function filterImageStyles(imageStylesConfig, imageStyle) {
-      var i = 0;
-      for (i; i < imageStylesConfig.length; i++) {
-        var imageStyleConfig = imageStylesConfig[i];
-        if (imageStyleConfig.type === imageStyle) {
-          return imageStyleConfig;
-        }
-      }
-      return undefined;
     }
 
     function updateAdvancedFromStyle(imageStyle, modal) {
@@ -236,13 +214,15 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
 
       imageStyleClient.loadImageStyles().then(function(imageStylesConfig) {
         // Do not update the form if the current style is the same are the one of the current user.
-        var overrideValues = modal.data('input').macroData === undefined ||
-          modal.data('input').macroData.imageStyle !== imageStyle;
+        var overrideValues = modal.data('input').imageData === undefined ||
+          modal.data('input').imageData.imageStyle !== imageStyle;
 
-        modal.data('input').macroData = modal.data('input').macroData || {};
-        modal.data('input').macroData.imageStyle = imageStyle;
+        modal.data('input').imageData = modal.data('input').imageData || {};
+        modal.data('input').imageData.imageStyle = imageStyle;
 
-        var config = filterImageStyles(imageStylesConfig.imageStyles, imageStyle);
+        var config = (imageStylesConfig || []).find(function(imageStyleConfig) {
+          return imageStyleConfig.type === imageStyle;
+        });
         var noStyle = false;
         if (config === undefined) {
           config = {};
@@ -267,48 +247,38 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
     // Update the form according to the modal input data.
     // 
     function updateForm(modal) {
-      var macroData = modal.data('input').macroData || {};
+      var imageData = modal.data('input').imageData || {};
 
       // Switch back to the default tab
       $('.image-editor a[href="#standard"]').tab('show');
 
       // Style
-      if (macroData.imageStyle) {
-        $('#imageStyles')[0].selectize.setValue(macroData.imageStyle);
+      if (imageData.imageStyle) {
+        $('#imageStyles')[0].selectize.setValue(imageData.imageStyle);
       }
 
       // Alt
-      $('#altText').val(macroData.alt);
+      $('#altText').val(imageData.alt);
 
 
       // Caption
-      $('#imageCaptionActivation').prop('checked', macroData.hasCaption);
+      $('#imageCaptionActivation').prop('checked', imageData.hasCaption);
       // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-      /*
-      var imageCaption = $('#imageCaption');
-      if (macroData.hasCaption) {
-        imageCaption.val(macroData.imageCaption);
-        imageCaption.prop('disabled', false);
-      } else {
-        imageCaption.val('');
-        imageCaption.prop('disabled', true);
-      }
-      */
 
       // Image size
-      $('#imageWidth').val(macroData.width);
-      $('#imageHeight').val(macroData.height);
+      $('#imageWidth').val(imageData.width);
+      $('#imageHeight').val(imageData.height);
 
       // Border
-      $('#imageBorder').prop('checked', macroData.border);
+      $('#imageBorder').prop('checked', imageData.border);
 
       // Alignment
-      $('#advanced [name="alignment"]').val([macroData.alignment]);
+      $('#advanced [name="alignment"]').val([imageData.alignment]);
 
       // Text Wrap
-      $('#advanced [name="textWrap"]').prop('checked', macroData.textWrap);
+      $('#advanced [name="textWrap"]').prop('checked', imageData.textWrap);
 
-      // Override with the style values only of it's an new image
+      //  Override with the style values only if it's a new image.
       updateAdvancedFromStyle($('#imageStyles')[0].selectize.getValue(), modal);
     }
 

@@ -40,8 +40,8 @@
   <hidden>true</hidden>
   <content>{{velocity output='false'}}
 #if ($xcontext.action == 'get')
-#template('display_macros.vm')
-#initRequiredSkinExtensions()
+  #template('display_macros.vm')
+  #initRequiredSkinExtensions()
 #end
 {{/velocity}}
 
@@ -50,7 +50,7 @@
 ## Expected request parameters:
 ## - isHTML5: true when htm5 is supported
 ##
-## Check if the default image styles are available.
+## Check if the image styles are available.
 #if ($services.component.getInstance('org.xwiki.rest.XWikiRestComponent', 'org.xwiki.image.style.rest.internal.DefaultImageStylesResource'))
   #set ($defaultImageStylesActive = true)
 #else
@@ -88,7 +88,8 @@
           &lt;/span&gt;
         &lt;/dt&gt;
         &lt;dd&gt;
-          #set ($discard = $xwiki.linkx.use($services.webjars.url('selectize.js', 'css/selectize.bootstrap3.css'), {'type': 'text/css', 'rel': 'stylesheet'}))
+          #set ($discard = $xwiki.linkx.use($services.webjars.url('selectize.js', 'css/selectize.bootstrap3.css'), 
+            {'type': 'text/css', 'rel': 'stylesheet'}))
           #set ($discard = $xwiki.ssfx.use('uicomponents/suggest/xwiki.selectize.css', true))
           #set ($discard = $xwiki.jsx.use('CKEditor.ImageEditorService'))
           &lt;select id="imageStyles"&gt;&lt;/select&gt;
@@ -105,7 +106,7 @@
         &lt;dd&gt;
           &lt;input id="altText" name="altText" value="" type="text" /&gt;
         &lt;/dd&gt;
-        #if ("${request.isHTML5}" == 'true')
+        #if ($request.isHTML5 == 'true')
         &lt;dt&gt;
           &lt;label for="imageCaptionActivation"&gt;
             $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.standardTab.caption.label'))
@@ -119,12 +120,7 @@
             &lt;input type="checkbox" 
               aria-label="$escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.standardTab.caption.ariaLabel'))"
               id="imageCaptionActivation" /&gt;
-          &lt;!-- TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
-            &lt;span class="input-group-addon" name="imageCaptionActivation"/&gt;
-              &lt;input type="checkbox" aria-label="TODO Image caption activation checkbox" id="imageCaptionActivation" /&gt;
-            &lt;/span&gt;
-            &lt;input type="text" class="form-control" aria-label="Image caption text input" id="imageCaption" name="imageCaption" disabled/&gt;
-          &lt;/div&gt;--&gt;
+          &lt;!-- TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435) -->
         &lt;/dd&gt;
         #end
       &lt;/dl&gt;
@@ -210,8 +206,8 @@
 
 {{velocity output='false'}}
 #if ($xcontext.action == 'get')
-#getRequiredSkinExtensions($requiredSkinExtensions)
-#set ($discard = $response.setHeader('X-XWIKI-HTML-HEAD', $requiredSkinExtensions))
+  #getRequiredSkinExtensions($requiredSkinExtensions)
+  #set ($discard = $response.setHeader('X-XWIKI-HTML-HEAD', $requiredSkinExtensions))
 #end
 {{/velocity}}</content>
 </xwikidoc>

@@ -17,34 +17,6 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-/**
- * Utility module to load required skin extensions.
- * FIXME: duplicated from xwiki-macro.
- */
-define('xwiki-skinx', ['jquery'], function($) {
-  'use strict';
-  
-  $.fn.loadRequiredSkinExtensions = function(requiredSkinExtensions) {
-    return this.each(function() {
-      // 'this' can be an element, the window or the document itself.
-      var ownerDocument = this.ownerDocument || this.document || this;
-      var head = $(ownerDocument).find('head');
-      var existingSkinExtensions;
-      var getExistingSkinExtensions = function() {
-        return head.find('link, script').map(function() {
-          return $(this).attr('href') || $(this).attr('src');
-        }).get();
-      };
-      $('<div></div>').html(requiredSkinExtensions).find('link, script').filter(function() {
-        if (!existingSkinExtensions) {
-          existingSkinExtensions = getExistingSkinExtensions();
-        }
-        var url = $(this).attr('href') || $(this).attr('src');
-        return existingSkinExtensions.indexOf(url) < 0;
-      }).appendTo(head);
-    });
-  };
-});
 
 /**
  * Append a message to the specified location. Remove the message after a delay.
@@ -92,7 +64,7 @@ define('imageWizard', ['imageSelector', 'imageEditor'], function(imageSelector, 
   }
 
   return function(params) {
-    if (params.macroData && params.macroData.resourceReference) {
+    if (params.imageData && params.imageData.resourceReference) {
       return editOnly(params);
     } else {
       return selectAndEdit(params);

@@ -64,7 +64,8 @@
   };
 
   CKEDITOR.plugins.add('xwiki-macro', {
-    requires: 'widget,balloontoolbar,notification,xwiki-marker,xwiki-loading,xwiki-localization,xwiki-selection',
+    requires: 'widget,balloontoolbar,notification,xwiki-marker,xwiki-loading,xwiki-localization,xwiki-selection,' +
+      'xwiki-dialog',
 
     init: function(editor) {
       var macroPlugin = this;
