@@ -81,7 +81,7 @@
         }
 
         // Style
-        this.setData('imageStyle', this.parts.image.getAttribute('data-xwiki-image-style'));
+        this.setData('imageStyle', this.parts.image.getAttribute('data-xwiki-image-style') || '');
 
         this.setData('border', this.parts.image.getAttribute('data-xwiki-image-style-border'));
         this.setData('alignment', this.parts.image.getAttribute('data-xwiki-image-style-alignment') || 'none');

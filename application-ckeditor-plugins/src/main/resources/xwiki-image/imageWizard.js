@@ -18,27 +18,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-/**
- * Append a message to the specified location. Remove the message after a delay.
- */
-define('imageNotification', ['jquery'], function($) {
-  'use strict';
-
-  return function(message, location, type) {
-    var delay = 5000;
-    if (type === 'error') {
-      delay = 10000;
-    }
-    var content = $("<div class='xnotification-wrapper'/>")
-      .append($("<div class='xnotification xnotification-" + type + "'/>")
-        .append(message));
-    location.append(content).delay(delay).queue(function() {
-      content.replaceWith('');
-    });
-  };
-});
-
-
 define('imageWizard', ['imageSelector', 'imageEditor'], function(imageSelector, imageEditor) {
   'use strict';
 

@@ -202,10 +202,16 @@ imageEditor.modal.backToEditor.button=Back
 imageEditor.modal.loadFail.message=Failed to retrieve the image editor form.
 imageEditor.modal.title=Edit Image
 imageEditor.modal.insertButton=Insert
+imageEditor.modal.initialization.fail=Failed to retrieve the image selection form.
 
 imageSelector.modal.title=Select Image
 imageSelector.modal.selectButton=Select
-imageSelector.modal.loadFail.message=Failed to retrieve the image selection form.</content>
+imageSelector.modal.loadFail.message=Failed to retrieve the image selection form.
+imageSelector.modal.fileUpload.success=File upload succeeded.
+imageSelector.modal.fileUpload.fail=File upload failed.
+imageSelector.modal.fileUpload.abort=File upload aborted.
+imageSelector.modal.initialization.fail=Failed to retrieve the image selection form.
+</content>
   <object>
     <name>CKEditor.Translations</name>
     <number>0</number>

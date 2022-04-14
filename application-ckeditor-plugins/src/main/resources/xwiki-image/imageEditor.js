@@ -22,21 +22,19 @@ define('imageEditorTranslationKeys', [], [
   'modal.backToEditor.button',
   'modal.loadFail.message',
   'modal.title',
-  'modal.insertButton'
+  'modal.insertButton',
+  'modal.initialization.fail'
 ]);
 
 define('imageStyleClient', ['jquery'], function($) {
   'use strict';
   var cachedResultDefault;
   var cachedResult;
-
-  var restURL = XWiki.contextPath + "/rest/wikis/" + XWiki.currentWiki + "/imageStyles";
-
   // Load the styles once and use a cached version if the styles are requested again.
   function loadImageStylesDefault() {
     if (cachedResultDefault === undefined) {
 
-      return Promise.resolve($.getJSON(restURL + "/default",
+      return Promise.resolve($.getJSON(XWiki.contextPath + $("#defaultImageStylesRestURL").val(),
         $.param({'documentReference': XWiki.Model.serialize(XWiki.currentDocument.documentReference)})))
         .then(function(defaultStyle) {
           cachedResultDefault = defaultStyle;
@@ -49,7 +47,7 @@ define('imageStyleClient', ['jquery'], function($) {
 
   function loadImageStyles() {
     if (cachedResult === undefined) {
-      return Promise.resolve($.getJSON(restURL,
+      return Promise.resolve($.getJSON(XWiki.contextPath + $("#imageStylesRestURL").val(),
         $.param({'documentReference': XWiki.Model.serialize(XWiki.currentDocument.documentReference)}))
         .then(function(defaultStyles) {
           cachedResult = defaultStyles;
@@ -151,7 +149,8 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
 
 
           }).fail(function(error) {
-          console.log('Failed to retrieve the image edition form.', error);
+            new XWiki.widgets.Notification(translations.get('modal.initialization.fail'), 'error');
+            console.log('Failed to retrieve the image edition form.', error);
         });
       } else {
         updateForm(modal);
@@ -220,7 +219,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
         modal.data('input').imageData = modal.data('input').imageData || {};
         modal.data('input').imageData.imageStyle = imageStyle;
 
-        var config = (imageStylesConfig || []).find(function(imageStyleConfig) {
+        var config = (imageStylesConfig.imageStyles || []).find(function(imageStyleConfig) {
           return imageStyleConfig.type === imageStyle;
         });
         var noStyle = false;
@@ -253,7 +252,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       $('.image-editor a[href="#standard"]').tab('show');
 
       // Style
-      if (imageData.imageStyle) {
+      if (imageData.imageStyle || imageData.imageStyle === '') {
         $('#imageStyles')[0].selectize.setValue(imageData.imageStyle);
       }
 

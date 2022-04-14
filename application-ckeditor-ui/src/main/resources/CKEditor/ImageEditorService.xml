@@ -51,7 +51,7 @@
 ## - isHTML5: true when htm5 is supported
 ##
 ## Check if the image styles are available.
-#if ($services.component.getInstance('org.xwiki.rest.XWikiRestComponent', 'org.xwiki.image.style.rest.internal.DefaultImageStylesResource'))
+#if ($services.imageStyle)
   #set ($defaultImageStylesActive = true)
 #else
   #set ($defaultImageStylesActive = false)
@@ -120,7 +120,7 @@
             &lt;input type="checkbox" 
               aria-label="$escapetool.xml($services.localization.render('ckeditor.plugin.image.imageEditor.standardTab.caption.ariaLabel'))"
               id="imageCaptionActivation" /&gt;
-          &lt;!-- TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435) -->
+          &lt;!-- TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435) --&gt;
         &lt;/dd&gt;
         #end
       &lt;/dl&gt;
@@ -199,6 +199,10 @@
       &lt;/form&gt;
     &lt;/div&gt;
   &lt;/div&gt;
+  &lt;input type="hidden" name="defaultImageStylesRestURL" id="defaultImageStylesRestURL"
+    value="$services.imageStyle.getDefaultImageStyleRestPath()" /&gt;
+  &lt;input type="hidden" name="imageStylesRestURL" id="imageStylesRestURL"
+      value="$services.imageStyle.getImageStylesRestPath()" /&gt;
 &lt;/div&gt;
 {{/html}}
 #end

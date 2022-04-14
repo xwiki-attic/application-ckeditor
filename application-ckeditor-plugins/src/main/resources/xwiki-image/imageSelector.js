@@ -20,12 +20,16 @@
 define('imageSelectorTranslationKeys', [], [
   'modal.title',
   'modal.loadFail.message',
-  'modal.selectButton'
+  'modal.selectButton',
+  'modal.fileUpload.success',
+  'modal.fileUpload.fail',
+  'modal.fileUpload.abort',
+  'modal.initialization.fail'
 ]);
 
 
-define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l10n!imageSelector', 'xwiki-skinx'],
-  function($, $modal, resource, notification, translations) {
+define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector', 'xwiki-skinx'],
+  function($, $modal, resource, translations) {
     'use strict';
 
     function getSelected(instance) {
@@ -64,19 +68,19 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
           var serialized = XWiki.Model.serialize(entityReference);
           saveSelectedImageReference(serialized, modal);
           imageSelector.removeClass('loading');
-          notification('File upload succeeded', $("#upload > form > dl > dd"), 'done');
+          new XWiki.widgets.Notification(translations.get('modal.fileUpload.success'), 'done');
         });
 
         // Return non-false value will disable fileButton in dialogui,
         // below listeners takes care of such situation and re-enable "send" button.
         loader.on('error', function(error) {
           console.log('Failed to upload a file', error);
-          notification('File upload failed', $("#upload > form > dl > dd"), 'error');
+          new XWiki.widgets.Notification(translations.get('modal.fileUpload.fail'), 'error');
           imageSelector.removeClass('loading');
         });
         loader.on('abort', function(error) {
           console.log('Failed to upload a file', error);
-          notification('File upload aborder', $("#upload > form > dl > dd"), 'error');
+          new XWiki.widgets.Notification(translations.get('modal.fileUpload.abort'), 'error');
           imageSelector.removeClass('loading');
         });
 
@@ -127,6 +131,7 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'imageNotification', 'l1
             modal.data('initialized', true);
           }).fail(function(error) {
           console.log('Failed to retrieve the image selection form.', error);
+          new XWiki.widgets.Notification(translations.get('modal.initialization.fail'), 'error');
           modal.data('initialized', true);
         });
       }
