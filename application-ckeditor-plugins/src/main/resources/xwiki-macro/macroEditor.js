@@ -379,7 +379,7 @@ define('macroParameterTreeSorter', ['jquery'], function($) {
 /**
  * Macro Parameter Tree Displayer
  */
-define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor', 'xwiki-skinx'], function($, translations) {
+define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($, translations) {
   'use strict';
 
   var displayMacroParameterTree = function(macroParameterTree, requiredSkinExtensions) {

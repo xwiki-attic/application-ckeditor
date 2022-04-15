@@ -28,7 +28,7 @@ define('imageSelectorTranslationKeys', [], [
 ]);
 
 
-define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector', 'xwiki-skinx'],
+define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector'],
   function($, $modal, resource, translations) {
     'use strict';
 

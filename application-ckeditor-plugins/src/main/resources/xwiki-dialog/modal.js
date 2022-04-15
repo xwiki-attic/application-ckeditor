@@ -94,18 +94,8 @@ define('modal', ['jquery', 'l10n!modal', 'bootstrap'], function($, translations)
     };
   };
 
-  return {
-    createModal: createModal,
-    createModalStep: createModalStep
-  };
-});
-
-/**
- * Utility module to load required skin extensions.
- */
-define('xwiki-skinx', ['jquery'], function($) {
-  'use strict';
-
+  // TODO: This method must be removed once the parent version is upgraded to  13.4.3+, 12.10.9+, or 13.7-rc-1+ 
+  // (see https://jira.xwiki.org/browse/XWIKI-18895)
   $.fn.loadRequiredSkinExtensions = function(requiredSkinExtensions) {
     return this.each(function() {
       // 'this' can be an element, the window or the document itself.
@@ -125,5 +115,10 @@ define('xwiki-skinx', ['jquery'], function($) {
         return existingSkinExtensions.indexOf(url) < 0;
       }).appendTo(head);
     });
+  };
+  
+  return {
+    createModal: createModal,
+    createModalStep: createModalStep
   };
 });

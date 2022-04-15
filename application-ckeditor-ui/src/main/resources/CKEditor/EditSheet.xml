@@ -170,7 +170,6 @@ require.config({
     ckeditor: '$!ckeditorPath',
     resourcePickerBundle: '$!resourcePickerBundlePath',
     modal: '$!modalPath',
-    'xwiki-skinx': '$!modalPath',
     l10n: '$!l10nPath',
     macroWizard: '$!macroWizardBundlePath',
     imageWizard: '$!imageWizardBundlePath',
