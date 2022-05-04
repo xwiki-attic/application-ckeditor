@@ -67,8 +67,12 @@
 
   &lt;!-- Tab panes --&gt;
   &lt;div class="tab-content"&gt;
+    #set ($firstUIX = true)
     #foreach ($uix in $selectorUIXs)
+      &lt;div role="tabpanel" class="tab-pane#if($firstUIX) active#end" id="$escapetool.url($uix.parameters.id)"&gt;
       $services.rendering.render($uix.execute(), 'xhtml/1.0')
+      &lt;/div&gt;
+      #set ($firstUIX = false)
     #end
   &lt;/div&gt;
 &lt;/div&gt;

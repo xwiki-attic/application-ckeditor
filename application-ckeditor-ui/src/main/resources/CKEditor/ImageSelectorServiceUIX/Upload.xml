@@ -241,29 +241,27 @@
       <content>{{velocity}}
 #set ($discard = $xwiki.jsx.use('CKEditor.ImageSelectorServiceUIX.Upload'))
 {{html clean="false"}}
-&lt;div role="tabpanel" class="tab-pane" id="upload"&gt;
-  &lt;form class="xform"&gt;
-    &lt;dl&gt;
-      &lt;dt&gt;
-        &lt;label for="fileUploadField"&gt;
-          $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.file.title'))
-        &lt;/label&gt;
-        &lt;span class="xHint"&gt;
-          $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.file.hint'))
-        &lt;/span&gt;
-      &lt;/dt&gt;
-      &lt;dd&gt;
-        &lt;input id="fileUploadField" name="fileUploadField" type="file" accept="image/*"/&gt;
-      &lt;/dd&gt;
-    &lt;/dl&gt;
-    &lt;p&gt;
-      &lt;span class="buttonwrapper"&gt;
-        &lt;input class="button" type="submit"
-          value="$escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.uploadButton'))"/&gt;
+&lt;form class="xform"&gt;
+  &lt;dl&gt;
+    &lt;dt&gt;
+      &lt;label for="fileUploadField"&gt;
+        $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.file.title'))
+      &lt;/label&gt;
+      &lt;span class="xHint"&gt;
+        $escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.file.hint'))
       &lt;/span&gt;
-    &lt;/p&gt;
-  &lt;/form&gt;
-&lt;/div&gt;
+    &lt;/dt&gt;
+    &lt;dd&gt;
+      &lt;input id="fileUploadField" name="fileUploadField" type="file" accept="image/*"/&gt;
+    &lt;/dd&gt;
+  &lt;/dl&gt;
+  &lt;p&gt;
+    &lt;span class="buttonwrapper"&gt;
+      &lt;input class="button" type="submit"
+        value="$escapetool.xml($services.localization.render('ckeditor.plugin.image.imageSelector.uploadTab.uploadButton'))"/&gt;
+    &lt;/span&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
 {{/html}}
 {{/velocity}}</content>
     </property>
@@ -274,7 +272,7 @@
       <name>org.xwiki.contrib.ckeditor.pluginsImageSelector.upload</name>
     </property>
     <property>
-      <parameters>priority=200
+      <parameters>priority=300
 title=ckeditor.plugin.image.imageSelector.uploadTab.title
 id=upload</parameters>
     </property>
