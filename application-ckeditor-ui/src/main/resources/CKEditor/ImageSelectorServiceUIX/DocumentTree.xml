@@ -138,9 +138,9 @@
     })
     .on('changed.jstree', function(event, data) {
       if (validateSelection(data.instance)) {
-        imageSelector.saveSelectedImageReference(getSelected(data.instance));
+        imageSelector.updateSelectedImageReferences([getSelected(data.instance)]);
       } else {
-         imageSelector.removeSelectedImageReference();
+         imageSelector.updateSelectedImageReferences([]);
       }
     });
 });</code>
@@ -243,10 +243,10 @@
 {{/velocity}}</content>
     </property>
     <property>
-      <extensionPointId>org.xwiki.contrib.ckeditor.pluginsImageSelector</extensionPointId>
+      <extensionPointId>org.xwiki.contrib.ckeditor.plugins.imageSelector</extensionPointId>
     </property>
     <property>
-      <name>org.xwiki.contrib.ckeditor.pluginsImageSelector.documentTree</name>
+      <name>org.xwiki.contrib.ckeditor.plugins.imageSelector.documentTree</name>
     </property>
     <property>
       <parameters>priority=200

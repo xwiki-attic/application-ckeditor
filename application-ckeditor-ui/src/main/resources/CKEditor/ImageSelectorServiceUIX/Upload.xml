@@ -122,35 +122,25 @@
     </property>
     <property>
       <code>require(['jquery', 'imageSelector', 'l10n!imageSelector', 'resource'], function($, imageSelector, translations, resource) {
-  var editor = imageSelector.getEditor();
   $("#upload form input.button").on('click', function(event) {
     event.preventDefault();
-    var loader = editor.uploadRepository.create($("#fileUploadField").prop('files')[0]);
     var imageSelectorElement = $('.image-selector');
-    loader.on('uploaded', function(evt) {
-      var resourceReference = evt.sender.responseData.message.resourceReference;
-      var entityReference = resource.convertResourceReferenceToEntityReference(resourceReference);
-      var serialized = XWiki.Model.serialize(entityReference);
-      imageSelector.saveSelectedImageReference(serialized);
-      imageSelectorElement.removeClass('loading');
-      new XWiki.widgets.Notification(translations.get('modal.fileUpload.success'), 'done');
-    });
-
-    // Return non-false value will disable fileButton in dialogui,
-    // below listeners takes care of such situation and re-enable "send" button.
-    loader.on('error', function(error) {
-      console.log('Failed to upload a file', error);
-      new XWiki.widgets.Notification(translations.get('modal.fileUpload.fail'), 'error');
-      imageSelectorElement.removeClass('loading');
-    });
-    loader.on('abort', function(error) {
-      console.log('Failed to upload a file', error);
-      new XWiki.widgets.Notification(translations.get('modal.fileUpload.abort'), 'error');
-      imageSelectorElement.removeClass('loading');
-    });
-
     imageSelectorElement.addClass('loading');
-    loader.loadAndUpload(editor.config.filebrowserUploadUrl);
+    imageSelector.createLoader($("#fileUploadField").prop('files')[0], {
+      onSuccess: function(entityReference) {
+        imageSelector.updateSelectedImageReferences([XWiki.Model.serialize(entityReference)]);
+        imageSelectorElement.removeClass('loading');
+        new XWiki.widgets.Notification(translations.get('modal.fileUpload.success'), 'done');
+      },
+      onError: function() {
+        new XWiki.widgets.Notification(translations.get('modal.fileUpload.fail'), 'error');
+        imageSelectorElement.removeClass('loading');
+      },
+      onAbort: function() {
+        new XWiki.widgets.Notification(translations.get('modal.fileUpload.abort'), 'error');
+        imageSelectorElement.removeClass('loading');
+      }
+    });
   });
 });
 </code>
@@ -266,10 +256,10 @@
 {{/velocity}}</content>
     </property>
     <property>
-      <extensionPointId>org.xwiki.contrib.ckeditor.pluginsImageSelector</extensionPointId>
+      <extensionPointId>org.xwiki.contrib.ckeditor.plugins.imageSelector</extensionPointId>
     </property>
     <property>
-      <name>org.xwiki.contrib.ckeditor.pluginsImageSelector.upload</name>
+      <name>org.xwiki.contrib.ckeditor.plugins.imageSelector.upload</name>
     </property>
     <property>
       <parameters>priority=300

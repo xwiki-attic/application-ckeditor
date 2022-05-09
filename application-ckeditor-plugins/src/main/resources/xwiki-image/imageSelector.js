@@ -45,23 +45,24 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector'],
     }
 
     /**
-     * Can be called by the image selector tab UIXs. Indicates that an image has been selected.
+     * Can be called by the image selector tab UIXs. Indicates the list of  slected images.
+     * Passing an empty array indicates that not images are currently selected.
+     * Note: Currently, only the first image of the list is taken into account.
      *
-     * @param imageReference the selected image reference
+     * @param imageReferences the selected image references
      */
-    function saveSelectedImageReference(imageReference) {
-      modal.data('imageReference', {
-        value: resource.convertEntityReferenceToResourceReference(getEntityReference(imageReference))
-      });
-      $('.image-selector-modal button.btn-primary').prop('disabled', false);
-    }
-
-    /**
-     * Can be called by the images selector tab UIXs. Indicated that no image is selected.
-     */
-    function removeSelectedImageReference() {
-      modal.data('imageReference', {});
-      $('.image-selector-modal button.btn-primary').prop('disabled', true);
+    function updateSelectedImageReferences(imageReferences) {
+      imageReferences = imageReferences || [];
+      if(imageReferences.length > 0) {
+        var imageReference = imageReferences[0];
+        modal.data('imageReference', {
+          value: resource.convertEntityReferenceToResourceReference(getEntityReference(imageReference))
+        });
+        $('.image-selector-modal button.btn-primary').prop('disabled', false);
+      } else {
+        modal.data('imageReference', {});
+        $('.image-selector-modal button.btn-primary').prop('disabled', true);  
+      }
     }
 
     function initialize(modal) {
@@ -83,10 +84,6 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector'],
           modal.data('initialized', true);
         });
       }
-    }
-
-    function getEditor() {
-      return modal.data('input').editor;
     }
 
     // Defined once the modal is initialized.
@@ -122,10 +119,48 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector'],
         });
       }
     });
+
+
+    /**
+     * Initialize a loader for the provided upload field. Three optional callbacks can be provided in the options 
+     * object:
+     * - onSuccess is called when the upload is successful, the entity reference is passed as argument.
+     * - onError is called when the upload fails
+     * - onAbort is called when the upload is aborted
+     * @param uploadField the upload field to create the loader for
+     * @param options an option object with callback actions
+     */
+    function createLoader(uploadField, options) {
+      options = options || {};
+      var editor = modal.data('input').editor;
+      var loader = editor.uploadRepository.create(uploadField);
+      loader.on('uploaded', function(evt) {
+        var resourceReference = evt.sender.responseData.message.resourceReference;
+        var entityReference = resource.convertResourceReferenceToEntityReference(resourceReference);
+        if (options.onSuccess) {
+          options.onSuccess(entityReference);
+        }
+      });
+
+      loader.on('error', function(error) {
+        console.log('Failed to upload a file', error);
+        if (options.onError) {
+          options.onError();
+        }
+      });
+      loader.on('abort', function(error) {
+        console.log('Failed to upload a file', error);
+        if (options.onAbort) {
+          options.onAbort();
+        }
+      });
+
+      loader.loadAndUpload(editor.config.filebrowserUploadUrl);
+    }
+    
     return {
-      createModal: createModal,
-      saveSelectedImageReference: saveSelectedImageReference,
-      removeSelectedImageReference: removeSelectedImageReference,
-      getEditor: getEditor
+      open: createModal,
+      updateSelectedImageReferences: updateSelectedImageReferences,
+      createLoader: createLoader
     };
   });

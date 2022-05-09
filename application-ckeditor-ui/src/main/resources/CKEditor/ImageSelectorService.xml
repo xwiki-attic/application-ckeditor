@@ -47,32 +47,29 @@
 
 {{velocity}}
 #if ($xcontext.action == 'get')
-#set ($selectorUIXs = $services.uix.getExtensions('org.xwiki.contrib.ckeditor.pluginsImageSelector', {'sortByParameter' : 'priority'}))
+#set ($selectorUIXs = $services.uix.getExtensions('org.xwiki.contrib.ckeditor.plugins.imageSelector', 
+  {'sortByParameter' : 'priority'}))
 {{html clean='false'}}
 &lt;div&gt;
   &lt;ul class="nav nav-tabs" role="tablist"&gt;
-    #set ($firstUIX = true)
     &lt;!-- Nav tabs --&gt;
     #foreach ($uix in $selectorUIXs)
-      &lt;li role="presentation" #if($firstUIX)class="active"#end&gt;
+      &lt;li role="presentation" #if($foreach.index == 0)class="active"#end&gt;
         &lt;a href="#$escapetool.url($uix.parameters.id)"
           aria-controls="$escapetool.xml($uix.parameters.id)"
           role="tab" data-toggle="tab"&gt;
           $escapetool.xml($services.localization.render($uix.parameters.title))
         &lt;/a&gt;
       &lt;/li&gt;
-      #set ($firstUIX = false)
     #end
   &lt;/ul&gt;
 
   &lt;!-- Tab panes --&gt;
   &lt;div class="tab-content"&gt;
-    #set ($firstUIX = true)
     #foreach ($uix in $selectorUIXs)
-      &lt;div role="tabpanel" class="tab-pane#if($firstUIX) active#end" id="$escapetool.url($uix.parameters.id)"&gt;
+      &lt;div role="tabpanel" class="tab-pane#if($foreach.index == 0) active#end" id="$escapetool.url($uix.parameters.id)"&gt;
       $services.rendering.render($uix.execute(), 'xhtml/1.0')
       &lt;/div&gt;
-      #set ($firstUIX = false)
     #end
   &lt;/div&gt;
 &lt;/div&gt;

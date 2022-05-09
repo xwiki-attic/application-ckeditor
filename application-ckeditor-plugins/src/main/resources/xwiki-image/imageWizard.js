@@ -37,7 +37,7 @@ define('imageWizard', ['imageSelector', 'imageEditor'], function(imageSelector, 
   function selectAndEdit(params) {
     params = params || {};
     params.newImage = true;
-    return imageSelector.createModal(params)
+    return imageSelector.open(params)
       .then(imageEditor)
       .then(backToSelectionOrFinish);
   }
