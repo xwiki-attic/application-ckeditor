@@ -54,6 +54,7 @@ define('imageSelector', ['jquery', 'modal', 'resource', 'l10n!imageSelector'],
     function updateSelectedImageReferences(imageReferences) {
       imageReferences = imageReferences || [];
       if(imageReferences.length > 0) {
+        // TODO:  Support the selection of several images (see CKEDITOR-445).
         var imageReference = imageReferences[0];
         modal.data('imageReference', {
           value: resource.convertEntityReferenceToResourceReference(getEntityReference(imageReference))
