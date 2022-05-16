@@ -152,17 +152,9 @@
         }
 
         // If alignment is undefined, try to convert from the legacy align data property.
-        if (this.data.align && !this.data.alignment) {
-          if (this.data.align === 'left') {
-            this.data.alignment = 'start';
-          } else if (this.data.align === 'right') {
-            this.data.alignment = 'end';
-          } else if (this.data.align === 'center') {
-            this.data.alignment = 'center';
-          } else {
-            this.data.alignment = 'none';
-          }
-        }
+        var mapping = {left: 'start', right: 'end', center: 'center'};
+        this.data.alignment = mapping[this.data.align] || 'none';
+
         // The old align needs to be undefined otherwise it's not removed when re-inserting the image after the edition,
         // add deprecated attributes to the image.
         this.data.align = 'none';
