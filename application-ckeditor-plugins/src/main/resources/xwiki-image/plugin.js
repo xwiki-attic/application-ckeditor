@@ -92,7 +92,8 @@
       imageWidget.data = function() {
 
         /**
-         * Update the given attribute at two locations in the widget, the image tag and the widget itself
+         * Update the given attribute at two locations in the widget, the image tag and the widget itself.
+         *
          * @param widget the widget to update
          * @param key the attribute key
          * @param value the attribute value
@@ -103,7 +104,8 @@
         }
 
         /**
-         * Remove the given attribute at two locations on the widget, the image tag and the widget itself
+         * Remove the given attribute at two locations on the widget, the image tag and the widget itself.
+         *
          * @param widget the widget to update
          * @param key the property key to removew
          */
