@@ -80,7 +80,7 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
     var list = $(macroListTemplate);
     var categories = {};
     macros.forEach(function(macro) {
-      var macroCategory = macro.defaultCategory || '';
+      var macroCategory = macro.category || macro.defaultCategory || '';
       categories[macroCategory] = (categories[macroCategory] || 0) + 1;
       var macroListItem = $(macroListItemTemplate).attr({
         'data-macroId': macro.id.id,
@@ -96,7 +96,7 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
           'data-extensionInstallAllowed': macro.extensionInstallAllowed
         });
       }
-      if (macro.defaultCategory === '_notinstalled') {
+      if (macroCategory === '_notinstalled') {
         macroListItem.find('.macro-category').text(translations.get('filter.category.notinstalled'));
       }
       macroListItem.find('.macro-description').text(macro.description);

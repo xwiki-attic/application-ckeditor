@@ -96,13 +96,20 @@
   #set ($discard = $data.put('options', { 'allMacrosExcludedCategories' : $allMacrosExcludedCategories }))
   #set ($macroList = [])
   #foreach ($macroDescriptor in $macroDescriptors)
+    #set ($category = $services.rendering.getMacroCategory($macroDescriptor.id))
+    #set ($defaultCategory = $macroDescriptor.defaultCategory)
+    #if(!$category)
+      #set($category = $defaultCategory)
+    #end
     #set ($macroTranslationKey = "rendering.macro.$macroDescriptor.id")
-    #set ($macroCategoryTranslationKey = "rendering.macroCategory.$macroDescriptor.defaultCategory")
+    #set ($macroCategoryTranslationKey = "rendering.macroCategory.$category")
+    #set ($macroDefaultCategoryTranslationKey = "rendering.macroCategory.$defaultCategory")
     #set ($discard = $macroList.add({
       'id': $macroDescriptor.id,
       'name': "#maybeTranslate(""${macroTranslationKey}.name"" $macroDescriptor.name)",
       'description': "#maybeTranslate(""${macroTranslationKey}.description"" $macroDescriptor.description)",
-      'defaultCategory': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)"
+      'defaultCategory': "#maybeTranslate($macroDefaultCategoryTranslationKey $defaultCategory)",
+      'category': "#maybeTranslate($macroCategoryTranslationKey $category)"
     }))
   #end
   #set ($macroList = $resolvedSortTool.sort($macroList, 'name'))
@@ -135,6 +142,7 @@
               'name': $extensionComponent.roleHint,
               'description': $extension.summary,
               'defaultCategory': '_notinstalled',
+              'category': '_notinstalled',
               'extensionId' : $extension.id.id,
               'extensionVersion' : $extension.id.version.value,
               'extensionType' : $extension.type,
