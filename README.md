@@ -1,5 +1,8 @@
 # CKEditor Integration with XWiki
 
+**Note**: This extension has been moved to [xwiki-platform](https://github.com/xwiki/xwiki-platform/tree/master/xwiki-platform-core/xwiki-platform-ckeditor).
+This repository is now only dedicated to bugfixes and will be moved to the attic once XWIki 13.10.x and 14.4.x support is dropped.
+
 Adds support for editing wiki pages using [CKEditor](http://ckeditor.com/).
 
 Starting with XWiki 8.2 this is the default WYSIWYG content editor. On older versions of XWiki this application extends the Edit menu with a new entry called 'CKEditor' that loads a new edit mode where you can edit the content of the wiki page using the CKEditor.
