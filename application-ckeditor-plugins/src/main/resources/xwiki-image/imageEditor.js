@@ -260,12 +260,12 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       var resourceReference = modal.data('input').imageData.resourceReference;
       return {
         resourceReference: resourceReference,
-        imageStyle: $('#imageStyles').val(),
+        imageStyle: $('#imageStyles').val() || '',
         alignment: $('#advanced [name="alignment"]:checked').val(),
         border: $('#advanced [name="imageBorder"]').prop('checked'),
         textWrap: $('#advanced [name="textWrap"]').prop('checked'),
         alt: $('#altText').val(),
-        hasCaption: $("#imageCaptionActivation").prop('checked'),
+        hasCaption: !!$("#imageCaptionActivation").prop('checked'),
         // TODO: Add support for editing the caption directly from the dialog (see CKEDITOR-435)
         width: $("#imageWidth").val(),
         height: $("#imageHeight").val(),
@@ -343,7 +343,7 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
     }
 
     // Update the form according to the modal input data.
-    // 
+    //
     function updateForm(modal) {
       var imageData = modal.data('input').imageData || {};
 
@@ -351,8 +351,9 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       $('.image-editor a[href="#standard"]').tab('show');
 
       // Style
-      if (imageData.imageStyle || imageData.imageStyle === '') {
-        $('#imageStyles')[0].selectize.setValue(imageData.imageStyle);
+      var imageStylesField = document.getElementById('imageStyles');
+      if (imageStylesField && (imageData.imageStyle || imageData.imageStyle === '')) {
+        imageStylesField.selectize.setValue(imageData.imageStyle);
       }
 
       // Alt
@@ -377,7 +378,9 @@ define('imageEditor', ['jquery', 'modal', 'imageStyleClient', 'l10n!imageEditor'
       $('#advanced [name="textWrap"]').prop('checked', imageData.textWrap);
 
       //  Override with the style values only if it's a new image.
-      updateAdvancedFromStyle($('#imageStyles')[0].selectize.getValue(), modal);
+      if (imageStylesField) {
+        updateAdvancedFromStyle(imageStylesField.selectize.getValue(), modal);
+      }
     }
 
     return $modal.createModalStep({
