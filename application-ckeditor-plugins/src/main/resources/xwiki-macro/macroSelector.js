@@ -74,6 +74,7 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
         '<span class="macro-name"></span>' +
         '<span class="macro-extension"></span>' +
         '<span class="macro-category badge"></span>' +
+        '<span class="macro-recommended badge"></span>' +
       '</div>' +
       '<div class="macro-description"></div>' +
     '</li>',
@@ -103,8 +104,7 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
         macroListItem.find('.macro-category').text(translations.get('filter.category.notinstalled'));
       }
       if (macro.extensionRecommended) {
-        macroListItem.find('.macro-categories-badges').append($('<span>')
-          .addClass('badge').addClass('recommended').text(translations.get('recommended')));
+        macroListItem.find('.macro-recommended').text(translations.get('recommended'));
       }
       macroListItem.find('.macro-description').text(macro.description);
     });
@@ -347,9 +347,6 @@ define('macroSelector', ['jquery', 'modal', 'l10n!macroSelector'], function($, $
       },
       getSelectedExtensionName: function() {
         return macroSelector.find('.macro-list > li.selected').attr('data-extensionName');
-      },
-      getSelectedExtensionRecommended: function() {
-        return macroSelector.find('.macro-list > li.selected').attr('data-extensionRecommended') == 'true';
       },
       isInstalledMacro: function() {
         return this.getSelectedMacroCategory() != '_notinstalled';
