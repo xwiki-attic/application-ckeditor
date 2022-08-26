@@ -120,9 +120,21 @@
     </property>
     <property>
       <code>require(['jquery', 'imageSelector', 'l10n!imageSelector', 'resource'], function($, imageSelector, translations, resource) {
-  $("#upload form input.button").on('click', function(event) {
+  const imageSelectorElement = $('.image-selector');
+  const uploadButton = $("#upload form input.button");
+
+  uploadButton.prop("disabled", true);
+
+  imageSelectorElement.on('change', function() {
+    if($("#fileUploadField").prop('files').length &gt; 0) {
+      uploadButton.prop("disabled", false);
+    } else {
+      uploadButton.prop("disabled", true);
+    }
+  });
+
+  uploadButton.on('click', function(event) {
     event.preventDefault();
-    var imageSelectorElement = $('.image-selector');
     imageSelectorElement.addClass('loading');
     imageSelector.createLoader($("#fileUploadField").prop('files')[0], {
       onSuccess: function(entityReference) {
