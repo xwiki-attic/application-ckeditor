@@ -44,7 +44,8 @@ define('macroService', ['jquery', 'xwiki-meta'], function($, xcontext) {
     } else {
       var url = new XWiki.Document('MacroService', 'CKEditor').getURL('get', $.param({
         outputSyntax: 'plain',
-        language: $('html').attr('lang')
+        language: $('html').attr('lang'),
+        sourceDocument: xcontext.documentReference.toString()
       }));
       $.get(url, {data: 'descriptor', macroId: macroId}).done(function(macroDescriptor) {
         if (typeof macroDescriptor === 'object' && macroDescriptor !== null) {
