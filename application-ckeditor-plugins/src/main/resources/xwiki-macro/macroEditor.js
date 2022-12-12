@@ -532,6 +532,11 @@ define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($
         if (matchedOption.length > 0) {
           // Use the canonical value.
           value = matchedOption.val();
+        } else if ('select-multiple' === firstInputType) {
+          // Add the missing options if the select allows multiple values.
+          value.split(',').forEach(function (entry) {
+            $('<option></option>').val(entry).text(entry).appendTo(valueInputs);
+          });
         } else {
           // Add the missing option.
           $('<option></option>').val(value).text(value).appendTo(valueInputs);
@@ -539,7 +544,7 @@ define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($
       }
     }
     // We pass the value as an array in order to properly handle radio inputs and checkboxes.
-    valueInputs.val([value]);
+    valueInputs.val(value && 'select-multiple' === firstInputType ? value.split(',') : [value]);
     return field;
   },
 
