@@ -530,7 +530,7 @@ define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($
       valueInputs = valueInputs.first();
       // For select inputs we should add the value to the list of options if it's missing.
       if (value && valueInputs.is('select')) {
-        value = value.split(',');
+        value = valueInputs.prop('type') === 'select-multiple' ? value.split(',') : [value];
         value.forEach(function (val, index) {
           var matchedOption = valueInputs.find('option').filter(matchesParameterValue(val));
           if (matchedOption.length > 0) {
@@ -538,7 +538,7 @@ define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($
             value[index] = matchedOption.val();
           } else {
             // Add the missing option.
-            $('<option></option>').val(value[index]).text(value[index]).appendTo(valueInputs);
+            $('<option></option>').val(val).text(val).appendTo(valueInputs);
           }
         });
       }
