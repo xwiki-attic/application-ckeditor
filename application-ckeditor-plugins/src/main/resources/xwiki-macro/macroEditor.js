@@ -42,10 +42,13 @@ define('macroService', ['jquery', 'xwiki-meta'], function($, xcontext) {
     if (macroDescriptor) {
       deferred.resolve(macroDescriptor);
     } else {
-      var url = new XWiki.Document('MacroService', 'CKEditor').getURL('get', $.param({
+      var sourceDocument = CKEDITOR.currentInstance.element.getAttribute('data-sourceDocumentReference');
+      var sourceDocumentReference = XWiki.Model.resolve(sourceDocument, XWiki.EntityType.DOCUMENT,
+        XWiki.currentDocument.documentReference);
+      var url = new XWiki.Document(sourceDocumentReference).getURL('get', $.param({
         outputSyntax: 'plain',
         language: $('html').attr('lang'),
-        sourceDocument: xcontext.documentReference.toString()
+        sheet: 'CKEditor.MacroService'
       }));
       $.get(url, {data: 'descriptor', macroId: macroId}).done(function(macroDescriptor) {
         if (typeof macroDescriptor === 'object' && macroDescriptor !== null) {

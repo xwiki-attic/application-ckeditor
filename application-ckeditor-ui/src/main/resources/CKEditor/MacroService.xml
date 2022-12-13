@@ -273,8 +273,7 @@
       #set ($translatedParameterDescriptor.type = $translatedParameterDescriptor.defaultValue.getClass())
     #end
     #set ($htmlDisplayerParameters = {
-      'name': $parameterDescriptor.id,
-      'sourceDocument': "$!request.sourceDocument"
+      'name': $parameterDescriptor.id
     })
     #if ($translatedParameterDescriptor.group)
       #set ($discard = $htmlDisplayerParameters.put('data-property-group',
