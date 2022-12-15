@@ -514,7 +514,7 @@ define('macroParameterTreeDisplayer', ['jquery', 'l10n!macroEditor'], function($
         } else {
           return $(this).val() === value;
         }
-      }
+      };
     };
     if (firstInputType === 'checkbox' || firstInputType === 'radio') {
       // Keep only the input elements with the same type as the first one.
