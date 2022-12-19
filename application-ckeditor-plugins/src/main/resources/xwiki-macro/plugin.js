@@ -299,7 +299,8 @@
           var widget = this;
           var input = {
             macroCall: macroCall,
-            hiddenMacroParameters: Object.keys(widget.editables || {})
+            hiddenMacroParameters: Object.keys(widget.editables || {}),
+            sourceDocumentReference: editor.element.getAttribute('data-sourceDocumentReference')
           };
           // Show our custom insert/edit dialog.
           require(['macroWizard'], function(macroWizard) {

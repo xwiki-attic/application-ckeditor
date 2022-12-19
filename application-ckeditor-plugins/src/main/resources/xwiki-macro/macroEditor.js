@@ -36,13 +36,12 @@ define('macroService', ['jquery', 'xwiki-meta'], function($, xcontext) {
 
   var macroDescriptors = {},
 
-  getMacroDescriptor = function(macroId) {
+  getMacroDescriptor = function(macroId, sourceDocument) {
     var deferred = $.Deferred();
     var macroDescriptor = macroDescriptors[macroId];
     if (macroDescriptor) {
       deferred.resolve(macroDescriptor);
     } else {
-      var sourceDocument = CKEDITOR.currentInstance.element.getAttribute('data-sourceDocumentReference');
       var sourceDocumentReference = XWiki.Model.resolve(sourceDocument, XWiki.EntityType.DOCUMENT,
         XWiki.currentDocument.documentReference);
       var url = new XWiki.Document(sourceDocumentReference).getURL('get', $.param({
@@ -691,7 +690,7 @@ define(
         }, 1000);
         return emptyMandatoryParams.length === 0;
       },
-      update: function(macroCall, syntaxId) {
+      update: function(macroCall, syntaxId, sourceDocumentReference) {
         var macroId = macroCall.name;
         if (syntaxId) {
           macroId += '/' + syntaxId;
@@ -702,7 +701,7 @@ define(
           .prop('requestNumber', requestNumber);
 
         // Load the macro descriptor
-        macroService.getMacroDescriptor(macroId)
+        macroService.getMacroDescriptor(macroId, sourceDocumentReference)
           .done(maybeCreateMacroEditor.bind(macroEditor, requestNumber, macroCall))
           .fail(maybeShowError.bind(macroEditor, requestNumber, 'descriptorRequestFailed'));
       }
@@ -727,7 +726,7 @@ define(
       });
       macroEditorAPI = macroEditor.xwikiMacroEditor(macroCall, input.syntaxId);
     } else {
-      macroEditorAPI.update(macroCall, input.syntaxId);
+      macroEditorAPI.update(macroCall, input.syntaxId, input.sourceDocumentReference);
     }
   },
 
@@ -801,13 +800,13 @@ define(
     }
   });
 
-  $.fn.xwikiMacroEditor = function(macroCall, syntaxId) {
+  $.fn.xwikiMacroEditor = function(macroCall, syntaxId, sourceDocumentReference) {
     this.each(function() {
       var macroEditor = $(this);
       if (!macroEditor.data('macroEditorAPI')) {
         var macroEditorAPI = createMacroEditorAPI(macroEditor);
         macroEditor.data('macroEditorAPI', macroEditorAPI);
-        macroEditorAPI.update(macroCall, syntaxId);
+        macroEditorAPI.update(macroCall, syntaxId, sourceDocumentReference);
       }
     });
     return this.data('macroEditorAPI');
