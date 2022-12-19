@@ -48,7 +48,7 @@
     <minimum.commons.version>8.4</minimum.commons.version>
     <minimum.rendering.version>${minimum.commons.version}</minimum.rendering.version>
     <minimum.platform.version>${minimum.commons.version}</minimum.platform.version>
-    <ckeditor.version>4.19.1</ckeditor.version>
+    <ckeditor.version>4.20.1</ckeditor.version>
 
     <!-- The path to the folder where we clone the CKEditor sources. -->
     <ckeditor.path>${project.build.directory}/ckeditor4-${ckeditor.version}</ckeditor.path>
