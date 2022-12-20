@@ -36,13 +36,13 @@ define('macroService', ['jquery', 'xwiki-meta'], function($, xcontext) {
 
   var macroDescriptors = {},
 
-  getMacroDescriptor = function(macroId, sourceDocumentReference) {
+  getMacroDescriptor = function(macroId, maybeSourceDocumentReference) {
     var deferred = $.Deferred();
     var macroDescriptor = macroDescriptors[macroId];
     if (macroDescriptor) {
       deferred.resolve(macroDescriptor);
     } else {
-      var sourceDocumentReference = sourceDocumentReference || XWiki.currentDocument.documentReference;
+      var sourceDocumentReference = maybeSourceDocumentReference || XWiki.currentDocument.documentReference;
       var url = new XWiki.Document(sourceDocumentReference).getURL('get', $.param({
         outputSyntax: 'plain',
         language: $('html').attr('lang'),
